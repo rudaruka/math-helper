@@ -31,48 +31,29 @@ st.markdown(
             margin-bottom: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        .sidebar .sidebar-content {
-            background: #f8faff;
-        }
-        .stSelectbox > div > div {
-            background: #ffffffcc;
-        }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Main title
 st.markdown('<div class="main-title">🌈 중학생 올인원 수학 도우미</div>', unsafe_allow_html=True)
-
 st.write(" ")
 
-# Sidebar
-menu = st.sidebar.selectbox(
-    "학년 선택",
-    ["중1", "중2", "중3", "추가 단원"]
-)
-
+menu = st.sidebar.selectbox("학년 선택", ["중1", "중2", " 중3", "추가 단원"])
 x = sp.Symbol('x')
 
 def float_input(label, value=0.0):
     return st.number_input(label, value=float(value))
 
-# ==========================================================
-# 🟦 중1
-# ==========================================================
+# ---------------- 중1 ----------------
 if menu == "중1":
     st.markdown('<div class="section-box">', unsafe_allow_html=True)
-    topic = st.selectbox(
-        "중1 단원 선택",
-        [
-            "사칙연산", "정수/유리수 변환", "소인수분해",
-            "최대공약수·최소공배수", "일차방정식", "좌표평면 거리",
-            "도형 넓이", "원 넓이"
-        ]
-    )
+    topic = st.selectbox("중1 단원 선택", [
+        "사칙연산", "정수/유리수 변환", "소인수분해",
+        "최대공약수·최소공배수", "일차방정식", "좌표평면 거리",
+        "도형 넓이", "원 넓이"
+    ])
 
-    # 사칙연산
     if topic == "사칙연산":
         a = float_input("첫 번째 수", 1)
         b = float_input("두 번째 수", 1)
@@ -83,21 +64,17 @@ if menu == "중1":
             elif op == "×": st.success(a*b)
             elif op == "÷": st.success(a/b if b!=0 else "0으로 나눌 수 없음")
 
-    # 정수/유리수
     elif topic == "정수/유리수 변환":
         num = float_input("분자")
         den = float_input("분모")
         if st.button("변환"):
-            if den == 0: st.error("0으로 나누기 불가")
-            else: st.success(num/den)
+            st.success(num/den if den!=0 else "0으로 나누기 불가")
 
-    # 소인수분해
     elif topic == "소인수분해":
         n = st.number_input("양의 정수 입력", value=12, step=1)
         if st.button("분해"):
             st.success(sp.factorint(int(n)))
 
-    # GCD LCM
     elif topic == "최대공약수·최소공배수":
         a = st.number_input("a", value=12, step=1)
         b = st.number_input("b", value=18, step=1)
@@ -107,7 +84,6 @@ if menu == "중1":
             st.write("GCD =", g)
             st.write("LCM =", l)
 
-    # 방정식
     elif topic == "일차방정식":
         eq_text = st.text_input("예: 2*x + 3 = 11")
         if st.button("풀이"):
@@ -117,7 +93,6 @@ if menu == "중1":
             except:
                 st.error("식 오류")
 
-    # 좌표
     elif topic == "좌표평면 거리":
         x1 = float_input("x1")
         y1 = float_input("y1")
@@ -126,24 +101,15 @@ if menu == "중1":
         if st.button("거리 계산"):
             st.success(math.dist([x1,y1],[x2,y2]))
 
-    # 도형
     elif topic == "도형 넓이":
         shape = st.selectbox("도형", ["삼각형", "직사각형", "평행사변형"])
-        if shape == "삼각형":
-            b = float_input("밑변")
-            h = float_input("높이")
-            if st.button("넓이"):
-                st.success(b*h/2)
-        elif shape == "직사각형":
-            w = float_input("가로")
-            h = float_input("세로")
-            if st.button("넓이"):
-                st.success(w*h)
-        else:
-            b = float_input("밑변")
-            h = float_input("높이")
-            if st.button("넓이"):
-                st.success(b*h)
+        if st.button("넓이"):
+            if shape == "삼각형":
+                st.success(float_input("밑변") * float_input("높이") / 2)
+            elif shape == "직사각형":
+                st.success(float_input("가로") * float_input("세로"))
+            else:
+                st.success(float_input("밑변") * float_input("높이"))
 
     elif topic == "원 넓이":
         r = float_input("반지름")
@@ -152,20 +118,13 @@ if menu == "중1":
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ==========================================================
-# 🟩 중2
-# ==========================================================
+# ---------------- 중2 ----------------
 elif menu == "중2":
     st.markdown('<div class="section-box">', unsafe_allow_html=True)
-
-    topic = st.selectbox(
-        "중2 단원 선택",
-        [
-            "식의 전개/인수분해", "연립방정식", "일차함수 값", "일차함수 그래프",
-            "유리수·순환소수", "원둘레·호의 길이",
-            "도형 — 피타고라스 확장"
-        ]
-    )
+    topic = st.selectbox("중2 단원 선택", [
+        "식의 전개/인수분해", "연립방정식", "일차함수 값", "일차함수 그래프",
+        "유리수·순환소수", "원둘레·호의 길이", "도형 — 피타고라스 확장"
+    ])
 
     if topic == "식의 전개/인수분해":
         expr = st.text_input("식 입력")
@@ -183,17 +142,9 @@ elif menu == "중2":
         if st.button("풀이"):
             try:
                 X,Y = sp.symbols('x y')
-                sol = sp.solve([eq1, eq2], [X,Y])
-                st.success(sol)
+                st.success(sp.solve([eq1, eq2], [X,Y]))
             except:
                 st.error("입력 오류")
-
-    elif topic == "일차함수 값":
-        a = float_input("a")
-        b = float_input("b")
-        xv = float_input("x 값")
-        if st.button("계산"):
-            st.success(a*xv + b)
 
     elif topic == "일차함수 그래프":
         func = st.text_input("예: 2*x + 3")
@@ -205,6 +156,13 @@ elif menu == "중2":
                 st.image("l.png")
             except:
                 st.error("식 오류")
+
+    elif topic == "일차함수 값":
+        a = float_input("a")
+        b = float_input("b")
+        xv = float_input("x 값")
+        if st.button("계산"):
+            st.success(a*xv + b)
 
     elif topic == "유리수·순환소수":
         num = float_input("분자",1)
@@ -227,40 +185,6 @@ elif menu == "중2":
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ==========================================================
-# 🟥 중3
-# ==========================================================
+# ---------------- 중3 ----------------
 elif menu == "중3":
-    st.markdown('<div class="section-box">', unsafe_allow_html=True)
-
-    topic = st.selectbox(
-        "중3 단원 선택",
-        [
-            "이차방정식", "이차함수 값", "이차함수 그래프",
-            "삼각비", "피타고라스", "확률"
-        ]
-    )
-
-    if topic == "이차방정식":
-        eq = st.text_input("식 입력 (예: x**2 - 5*x + 6)")
-        if st.button("풀이"):
-            try:
-                e = sp.Eq(*sp.sympify(eq).args)
-                st.success(sp.solve(e,x))
-            except:
-                st.error("식 오류")
-
-    elif topic == "이차함수 값":
-        a = float_input("a")
-        b = float_input("b")
-        c = float_input("c")
-        xv = float_input("x")
-        if st.button("계산"):
-            st.success(a*xv*xv + b*xv + c)
-
-    elif topic == "이차함수 그래프":
-        func = st.text_input("예: x**2 - 4*x + 3")
-        if st.button("그래프"):
-            try:
-                f =sp.sympify(func)
-                p = sp.plot(f,(x,-10,10),show=False)
+    st.markdown('<div class="section-box">', unsafe_allow_html
