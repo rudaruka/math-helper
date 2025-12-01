@@ -2,40 +2,6 @@ import streamlit as st
 import sympy as sp
 import math
 
-# ==========================================
-# ✨ Custom Pastel Theme (Sky Blue + Soft Pink)
-# ==========================================
-st.markdown(
-    """
-    <style>
-        body {
-            background: linear-gradient(135deg, #dff3ff 0%, #ffe6f2 100%);
-        }
-        .stApp {
-            background: transparent;
-        }
-        .main-title {
-            text-align: center;
-            padding: 12px;
-            font-size: 40px;
-            font-weight: 700;
-            color: #5a6ea8;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.5);
-            backdrop-filter: blur(8px);
-        }
-        .section-box {
-            padding: 20px;
-            background: rgba(255,255,255,0.6);
-            border-radius: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 st.markdown('<div class="main-title">🌈 중학생 올인원 수학 도우미</div>', unsafe_allow_html=True)
 st.write(" ")
 
