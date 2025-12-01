@@ -181,7 +181,7 @@ if menu == "중1":
         if shape == "삼각형":
             st.markdown("---")
             st.markdown("### 🔺 삼각형 넓이: $\\frac{1}{2} \\times \\text{밑변} \\times \\text{높이}$")
-            
+            #  # 주석 처리
             col1, col2 = st.columns(2)
             with col1:
                 b = float_input("밑변")
@@ -193,7 +193,7 @@ if menu == "중1":
         elif shape == "직사각형":
             st.markdown("---")
             st.markdown("### ⬛ 직사각형 넓이: $\\text{가로} \\times \\text{세로}$")
-            
+            #  # 주석 처리
             col1, col2 = st.columns(2)
             with col1:
                 w = float_input("가로")
@@ -205,10 +205,10 @@ if menu == "중1":
         else:  # 평행사변형
             st.markdown("---")
             st.markdown("### ▱ 평행사변형 넓이: $\\text{밑변} \\times \\text{높이}$")
-            
+            # 
 
 [Image of parallelogram with base b and height h labeled for area calculation]
-
+ # 주석 처리
             col1, col2 = st.columns(2)
             with col1:
                 b = float_input("밑변")
@@ -335,7 +335,7 @@ elif menu == "중2":
     # 원 넓이 / 호의 길이
     elif "도형 — 원 넓이/호의 길이" in topic:
         st.header("🔵 원의 넓이 및 부채꼴 호의 길이")
-        
+        #  # 주석 처리
 
         r = float_input("반지름 (r)")
         
@@ -437,7 +437,7 @@ elif menu == "중3":
         st.header("📐 피타고라스 정리")
         st.markdown("직각삼각형의 두 변 $a, b$가 주어졌을 때 빗변 $c$의 길이:")
         st.latex(r"a^2 + b^2 = c^2 \implies c = \sqrt{a^2 + b^2}")
-        
+        #  # 주석 처리
         
         col_a, col_b = st.columns(2)
         with col_a:
@@ -453,12 +453,12 @@ elif menu == "중3":
     elif "삼각비" in topic:
         st.header("📏 삼각비 (sin, cos, tan)")
         st.markdown("각도 $\\theta$에 대한 삼각비 값을 계산합니다.")
-        
+        # 
 
 [Image of a right triangle showing opposite, adjacent, and hypotenuse relative to angle theta]
-
+ # 주석 처리
         
-        ang = float_input("각도 (도 단위)")
+        ang = float_input("각도(도 단위)")
         
         if st.button("계산"):
             r = math.radians(ang)
