@@ -1,6 +1,7 @@
 import streamlit as st
 import sympy as sp
 import math
+import os # 파일 저장/삭제를 위해 os 모듈 임포트
 
 st.set_page_config(page_title="중등 수학 도우미", layout="wide")
 
@@ -16,7 +17,7 @@ menu = st.sidebar.selectbox(
 )
 
 # ======================================================
-# 공통: 입력 보조
+# 공통: 입력 보조 및 심볼
 # ======================================================
 def float_input(label, value=0.0):
     # 입력 필드를 옆으로 나열할 때 사용
@@ -89,10 +90,11 @@ if menu == "중1":
             if den == 0: 
                 st.error("❌ 분모는 0이 될 수 없습니다.")
             else:
-                display_result("변환 결과 (소수)", num / den)
-                if num / den == int(num / den):
+                result_val = num / den
+                display_result("변환 결과 (소수)", result_val)
+                if result_val == int(result_val):
                     st.info("💡 결과는 정수입니다.")
-                elif len(str(num/den).split('.')[-1]) < 10:
+                elif len(str(result_val).split('.')[-1]) < 10:
                     st.info("💡 결과는 유한소수입니다.")
                 else:
                     st.info("💡 결과는 무한소수 (순환소수 또는 비순환소수)일 수 있습니다.")
@@ -181,7 +183,6 @@ if menu == "중1":
         if shape == "삼각형":
             st.markdown("---")
             st.markdown("### 🔺 삼각형 넓이: $\\frac{1}{2} \\times \\text{밑변} \\times \\text{높이}$")
-            #  # 주석 처리
             col1, col2 = st.columns(2)
             with col1:
                 b = float_input("밑변")
@@ -193,7 +194,6 @@ if menu == "중1":
         elif shape == "직사각형":
             st.markdown("---")
             st.markdown("### ⬛ 직사각형 넓이: $\\text{가로} \\times \\text{세로}$")
-            #  # 주석 처리
             col1, col2 = st.columns(2)
             with col1:
                 w = float_input("가로")
@@ -205,10 +205,6 @@ if menu == "중1":
         else:  # 평행사변형
             st.markdown("---")
             st.markdown("### ▱ 평행사변형 넓이: $\\text{밑변} \\times \\text{높이}$")
-            # 
-
-[Image of parallelogram with base b and height h labeled for area calculation]
- # 주석 처리
             col1, col2 = st.columns(2)
             with col1:
                 b = float_input("밑변")
@@ -262,18 +258,18 @@ elif menu == "중2":
     # 연립방정식
     elif "연립방정식" in topic:
         st.header("🎯 연립방정식 풀이 (미지수 x, y)")
-        st.info("ℹ️ **SymPy 형식**으로 입력하세요. (예: `2*x + y = 7`)")
+        st.info("ℹ️ **SymPy 형식**으로 입력하세요. (예: `2*x + y - 7` (우변 0 가정))")
         
         eq1 = st.text_input("1번 식", value="2*x + y - 7")
         eq2 = st.text_input("2번 식", value="x - y - 1")
         
         if st.button("연립방정식 풀기"):
             try:
-                # sp.sympify(eq1) == 0 을 가정하고 solve
                 sol = sp.solve([eq1, eq2], [x, y])
                 
                 st.subheader("✅ 해 (Solution)")
                 if sol:
+                    # 결과를 LaTeX로 출력
                     st.write(f"$$x = {sp.latex(sol[x])}$$")
                     st.write(f"$$y = {sp.latex(sol[y])}$$")
                     st.success(f"해: x={sol[x]}, y={sol[y]}")
@@ -306,13 +302,18 @@ elif menu == "중2":
         func = st.text_input("함수식 입력 (y = ...)", value="2*x + 3")
         
         if st.button("그래프 그리기"):
+            img_file = "g.png"
             try:
                 f = sp.sympify(func)
                 p = sp.plot(f, (x, -10, 10), show=False, title=f"y = {func}")
-                p.save("g.png")
-                st.image("g.png", caption=f"일차함수 $y = {sp.latex(f)}$")
+                p.save(img_file)
+                st.image(img_file, caption=f"일차함수 $y = {sp.latex(f)}$")
             except:
                 st.error("❌ 식 형식을 확인하세요. 변수는 'x'만 사용 가능합니다.")
+            finally:
+                # 파일 정리 (선택 사항이지만 권장)
+                if os.path.exists(img_file):
+                    os.remove(img_file)
 
     # 순환소수 변환
     elif "유리수·순환소수" in topic:
@@ -329,13 +330,13 @@ elif menu == "중2":
                 st.error("❌ 분모는 0이 될 수 없습니다.")
             else:
                 result = num / den
-                display_result("소수", f"{result:.10f}...") # 순환하는 것을 보여주기 위해 10자리까지 출력
-                st.info("💡 순환마디를 찾으려면 긴 나눗셈이 필요합니다.")
+                # 소수점 이하 길게 표시하여 순환 마디를 간접적으로 보여줌
+                display_result("소수", f"{result:.10f}...") 
+                st.info("💡 순환마디를 찾는 것은 계산이 복잡하므로, 계산기로 확인해 보세요.")
                 
     # 원 넓이 / 호의 길이
     elif "도형 — 원 넓이/호의 길이" in topic:
         st.header("🔵 원의 넓이 및 부채꼴 호의 길이")
-        #  # 주석 처리
 
         r = float_input("반지름 (r)")
         
@@ -349,10 +350,10 @@ elif menu == "중2":
             st.markdown("---")
             col_a, col_l = st.columns(2)
             with col_a:
-                st.metric("원 전체 넓이", f"{area_circle:.4f} $\\pi$ 포함")
+                st.metric("원 전체 넓이 ($r^2 \pi$)", f"{area_circle:.4f} ($\pi$를 곱한 값)")
             with col_l:
-                st.metric("호의 길이 (L)", f"{arc_length:.4f} $\\pi$ 포함")
-            st.write(f"**원 둘레** $2 \\pi r$ = ${2 * math.pi * r:.4f}$")
+                st.metric("호의 길이 ($2 r \pi \\times \\frac{\\theta}{360}$)", f"{arc_length:.4f} ($\pi$를 곱한 값)")
+            st.write(f"**원 둘레** $2 \pi r$ = ${2 * math.pi * r:.4f}$")
 
 # ======================================================
 # 🟥 중3 기능
@@ -377,8 +378,8 @@ elif menu == "중3":
     # 이차방정식
     if "이차방정식" in topic:
         st.header("💣 이차방정식 풀이")
-        st.info("ℹ️ **SymPy 형식**으로 입력하세요. (예: `x**2 - 5*x + 6 = 0`)")
-        eq = st.text_input("이차방정식 입력", value="x**2 - 5*x + 6")
+        st.info("ℹ️ **SymPy 형식**으로 입력하세요. (예: `x**2 - 5*x + 6`) (우변 0 가정)")
+        eq = st.text_input("이차방정식 좌변 입력", value="x**2 - 5*x + 6")
         
         if st.button("해 구하기"):
             try:
@@ -394,7 +395,7 @@ elif menu == "중3":
                          st.markdown(f"**해 {i+1}**: ${sp.latex(sol)}$")
                     st.success(f"해: {solution}")
                 else:
-                    st.warning("⚠️ 실수해가 존재하지 않을 수 있습니다.")
+                    st.warning("⚠️ 실수해가 존재하지 않을 수 있습니다. (판별식 D < 0)")
             except:
                 st.error("❌ 식 형식을 다시 확인하세요. 변수는 'x'만 사용 가능합니다.")
 
@@ -424,20 +425,24 @@ elif menu == "중3":
         func = st.text_input("함수식 입력 (y = ...)", value="x**2 - 4*x + 3")
         
         if st.button("그래프 그리기"):
+            img_file = "quad.png"
             try:
                 f = sp.sympify(func)
                 p = sp.plot(f, (x, -10, 10), show=False, title=f"y = {func}")
-                p.save("quad.png")
-                st.image("quad.png", caption=f"이차함수 $y = {sp.latex(f)}$")
+                p.save(img_file)
+                st.image(img_file, caption=f"이차함수 $y = {sp.latex(f)}$")
             except:
                 st.error("❌ 식 형식을 다시 확인하세요. 변수는 'x'만 사용 가능합니다.")
+            finally:
+                if os.path.exists(img_file):
+                    os.remove(img_file)
+
 
     # 피타고라스
     elif "피타고라스 정리" in topic:
         st.header("📐 피타고라스 정리")
         st.markdown("직각삼각형의 두 변 $a, b$가 주어졌을 때 빗변 $c$의 길이:")
         st.latex(r"a^2 + b^2 = c^2 \implies c = \sqrt{a^2 + b^2}")
-        #  # 주석 처리
         
         col_a, col_b = st.columns(2)
         with col_a:
@@ -453,10 +458,6 @@ elif menu == "중3":
     elif "삼각비" in topic:
         st.header("📏 삼각비 (sin, cos, tan)")
         st.markdown("각도 $\\theta$에 대한 삼각비 값을 계산합니다.")
-        # 
-
-[Image of a right triangle showing opposite, adjacent, and hypotenuse relative to angle theta]
- # 주석 처리
         
         ang = float_input("각도(도 단위)")
         
