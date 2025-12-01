@@ -6,7 +6,7 @@ import os
 # ======================================================
 # 초기 설정
 # ======================================================
-st.set_page_config(page_title="중등 수학 도우미", layout="wide")
+st.set_page_config(page_title="중•수학도우미", layout="wide")
 
 # 세션 상태 초기화: 'menu_key'를 사용하여 강제로 Streamlit 앱을 리렌더링 (다시 시작)하게 만듦
 if 'menu_key' not in st.session_state:
@@ -15,7 +15,7 @@ if 'menu_key' not in st.session_state:
 # ======================================================
 # 제목 및 메뉴 설정
 # ======================================================
-st.markdown("## ✨ 중학생 수학 도우미 — 계산/그래프/공식 한곳에", unsafe_allow_html=True)
+st.markdown("## ✨ 중학생을 위한 수학 도우미!", unsafe_allow_html=True)
 st.write("---")
 
 # 학년 선택 함수
